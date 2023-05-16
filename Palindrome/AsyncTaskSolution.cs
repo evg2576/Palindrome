@@ -20,11 +20,7 @@ internal class AsyncTaskSolution
     {
         try
         {
-            long input = Convert.ToInt64(text);
-            var digitArray = input
-            .ToString()
-            .Select(digit => long.Parse(digit.ToString()))
-            .ToArray();
+            var digitArray = text.ToArray();
 
             _stopwatch.Start();
             await Task.Run(() =>

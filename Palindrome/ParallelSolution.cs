@@ -20,15 +20,11 @@ internal class ParallelSolution
     {
         try
         {
-            long input = Convert.ToInt64(text);
-            var digitArray = input
-                .ToString()
-                .Select(digit => long.Parse(digit.ToString()))
-                .ToArray();
+            var digitArray = text.ToCharArray().Select(c => c.ToString()).ToArray();
 
             _stopwatch.Start();
-            Parallel.For(MIN_DIGITS_COUNT_IN_PALINDROME, digitArray.Length + 1,
-                (i) => FindPalindromes(digitArray, i));
+            Parallel.For(MIN_DIGITS_COUNT_IN_PALINDROME, digitArray.Length + 1, 
+                (i) => FindPalindromes(digitArray.Select(x => Convert.ToInt64(x)).ToArray(), i));
             _stopwatch.Stop();
 
             _output($"Time for Parallel: {_stopwatch.ElapsedMilliseconds}");

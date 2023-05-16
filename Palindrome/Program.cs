@@ -4,21 +4,32 @@ internal class Program
 {
     private static async Task Main(string[] args)
     {
-        Console.WriteLine("Enter the number in which you want to find palindromes: ");
-        string input = Console.ReadLine() ?? string.Empty;
+        try
+        {
+            Console.WriteLine("Enter the number in which you want to find palindromes: ");
+            string input = Console.ReadLine() ?? string.Empty;
 
-        ParallelSolution parallelSolution = new ParallelSolution(Console.WriteLine);
-        parallelSolution.Run(input);
+            if (!string.IsNullOrEmpty(input) && Int64.TryParse(input, out _))
+            {
+                ParallelSolution parallelSolution = new ParallelSolution(Console.WriteLine);
+                parallelSolution.Run(input);
 
-        AsyncTaskSolution asyncTaskSolution = new AsyncTaskSolution(Console.WriteLine);
-        await asyncTaskSolution.RunAsync(input);
+                AsyncTaskSolution asyncTaskSolution = new AsyncTaskSolution(Console.WriteLine);
+                await asyncTaskSolution.RunAsync(input);
 
-        ThreadSolution threadSolution = new ThreadSolution(Console.WriteLine);
-        threadSolution.Run(input);
+                ThreadSolution threadSolution = new ThreadSolution(Console.WriteLine);
+                threadSolution.Run(input);
 
-        ThreadPoolSolution threadPoolSolution = new ThreadPoolSolution(Console.WriteLine);
-        threadPoolSolution.Run(input);
+                ThreadPoolSolution threadPoolSolution = new ThreadPoolSolution(Console.WriteLine);
+                threadPoolSolution.Run(input);
 
-        Console.ReadKey();
+                Console.ReadKey();
+            }
+            else throw new ArgumentException("Еhe entered text is not a number!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 }

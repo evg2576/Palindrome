@@ -21,27 +21,36 @@ internal class ThreadSolution
         try
         {
             var digitArray = text.ToArray();
+            List<Thread> threads = new List<Thread>();
 
-            _stopwatch.Start();
-            Thread thread = new Thread(() =>
+            for (int i = MIN_DIGITS_COUNT_IN_PALINDROME; i <= digitArray.Length; i++)
             {
-                for (int i = MIN_DIGITS_COUNT_IN_PALINDROME; i <= digitArray.Length; i++)
-                    for (int j = 0; j + i <= digitArray.Length; j++)
+                int k = i;
+                threads.Add(new Thread(() =>
+                {
+                    for (int j = 0; j + k <= digitArray.Length; j++)
                     {
                         var res = Convert.ToInt64(digitArray
                             .Skip(j)
-                            .Take(i)
+                            .Take(k)
                             .Select(x => x.ToString())
                             .Aggregate((x, y) => x + y));
 
                         if (_mathHelper.IsPalindrome(res))
                             _output(res.ToString());
                     }
-                _stopwatch.Stop();
-                _output($"Time for Thread: {_stopwatch.ElapsedMilliseconds}");
-            });
+                }));
+            }
 
-            thread.Start();
+            _stopwatch.Start();
+            foreach (var thread in threads)
+                thread.Start();
+
+            foreach (var thread in threads)
+                thread.Join();
+
+            _stopwatch.Stop();
+            _output($"Time for Thread: {_stopwatch.ElapsedMilliseconds}");
         }
         catch (Exception ex)
         {
